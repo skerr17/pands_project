@@ -28,18 +28,14 @@ iris_data = pd.read_csv('iris.data', header=None, usecols=[0, 1, 2, 3, 4],
 # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.describe.html
 global_iris_descriptive_stats = iris_data.describe()
 
-# # Print the descriptive statistics
-print(global_iris_descriptive_stats)
-
 # # Print the descriptive statistics for each species
 # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
 # Reference: https://www.w3schools.com/python/pandas/ref_df_groupby.asp
-iris_descriptive_stats_by_species = iris_data.groupby('species').describe()
-# Print the descriptive statistics for each species
-print(iris_descriptive_stats_by_species)
+iris_descriptive_stats_by_species =iris_data.groupby('species').describe()
 
 # Write the  Description Stats to a Text File
 # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html
+# Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.stack.html - used to make the data more readable
 with open('iris_descriptive_stats.txt', 'w') as f:
     # Write the global descriptive statistics to the file
     f.write('===Global Descriptive Statistics===\n')
@@ -47,5 +43,5 @@ with open('iris_descriptive_stats.txt', 'w') as f:
     f.write('\n\n')
     # Write the descriptive statistics for each species to the file
     f.write('===Descriptive Statistics by Species===\n')
-    f.write(tabulate(iris_descriptive_stats_by_species, headers='keys', tablefmt='grid'))
+    f.write(tabulate(iris_descriptive_stats_by_species.stack(), headers='keys', tablefmt='grid'))
 
