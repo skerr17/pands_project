@@ -56,20 +56,19 @@ plt.figure(figsize=(12, 12))
 
 # Create a list of the variables to plot
 histogram_variables = iris_data.columns.drop('species') # ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-print(histogram_variables)
 
+# Create a list of titles for the histograms
 histogram_titles = [s.replace('_', ' ').title() for s in histogram_variables] # ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
-print(histogram_titles)
 
+# Get the unique species from the data
 species = iris_data['species'].unique() # ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
 
-
+# Format the species names for the legend
 format_species = [s.replace('Iris-', '').capitalize() for s in species] # ['Setosa', 'Versicolor', 'Virginica']
-print(format_species)
 
 # Define colors for each species
 colors = ['red', 'green', 'blue'] # Colors for each species
-labels = species # Labels for each species
+labels = format_species # Labels for each species
 
 # Loop through each variable and create a subplot
 for i, variable in enumerate(histogram_variables):
@@ -84,7 +83,7 @@ for i, variable in enumerate(histogram_variables):
     plt.title(f'Frequency of {histogram_titles[i]} Across Species')
     plt.xlabel(f'{histogram_titles[i]} (cm)')
     plt.ylabel('Frequency')
-    plt.legend(labels=format_species)
+    plt.legend()
 
 # Adjust layout to prevent overlap
 plt.tight_layout()
