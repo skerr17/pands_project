@@ -51,14 +51,13 @@ with open('iris_descriptive_stats.txt', 'w') as f:
 # Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
 # Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html
 
-# Set the figure size
-plt.figure(figsize=(12, 12))
+
 
 # Create a list of the variables to plot
-histogram_variables = iris_data.columns.drop('species') # ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+iris_variables = iris_data.columns.drop('species') # ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
 
 # Create a list of titles for the histograms
-histogram_titles = [s.replace('_', ' ').title() for s in histogram_variables] # ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
+iris_variables_titles = [s.replace('_', ' ').title() for s in iris_variables] # ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
 
 # Get the unique species from the data
 species = iris_data['species'].unique() # ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
@@ -70,8 +69,11 @@ format_species = [s.replace('Iris-', '').capitalize() for s in species] # ['Seto
 colors = ['red', 'green', 'blue'] # Colors for each species
 labels = format_species # Labels for each species
 
+# Set the figure size
+plt.figure(figsize=(12, 12))
+
 # Loop through each variable and create a subplot
-for i, variable in enumerate(histogram_variables):
+for i, variable in enumerate(iris_variables):
     plt.subplot(2, 2, i + 1)  # Create a 2x2 grid of subplots
     for j, specie in enumerate(species):
         # Filter the data for the current species
@@ -80,8 +82,8 @@ for i, variable in enumerate(histogram_variables):
         plt.hist(species_data, bins=10, alpha=0.7, color=colors[j], label=labels[j], edgecolor='black')
     
     # Add title, labels, and legend
-    plt.title(f'Frequency of {histogram_titles[i]} Across Species')
-    plt.xlabel(f'{histogram_titles[i]} (cm)')
+    plt.title(f'Frequency of {iris_variables_titles[i]} Across Species')
+    plt.xlabel(f'{iris_variables_titles[i]} (cm)')
     plt.ylabel('Frequency')
     plt.legend()
 
@@ -91,6 +93,40 @@ plt.tight_layout()
 # Save the plot as a PNG file
 plt.savefig('iris_histograms.png')
 
-# Show the plot
+
+
+# Scatter Plot of each pair of variables
+# Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
+
+# set the figure size
+plt.figure(figsize=(12, 12))
+
+# Note reuse the vaiables defined earlier 
+
+# Loop through each variable and create a subplot
+for i, variable in enumerate(iris_variables):
+    plt.subplot(2, 2, i + 1)  # Create a 2x2 grid of subplots
+    for j, specie in enumerate(species):
+        # Filter the data for the current species
+        species_data = iris_data[iris_data['species'] == specie]
+        # Plot the scatter plot for the current species
+        plt.scatter(species_data[variable], species_data[iris_variables[i - 1]], 
+                    label=labels[j], color=colors[j], alpha=0.7)
+    
+    # Add title, labels, and legend
+    plt.title(f'{iris_variables_titles[i]} vs {iris_variables_titles[i - 1]}')
+    plt.xlabel(f'{iris_variables_titles[i]} (cm)')
+    plt.ylabel(f'{iris_variables_titles[i - 1]} (cm)')
+    plt.legend()
+
+# Adjust layout to prevent overlap
+plt.tight_layout()
+
+# Save the plot as a PNG file
+plt.savefig('iris_scatter.png')
+
+
+# show the plot
 plt.show()
+
 
