@@ -94,7 +94,6 @@ plt.tight_layout()
 plt.savefig('iris_histograms.png')
 
 
-
 # Scatter Plot of each pair of variables
 # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
 
