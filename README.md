@@ -1,5 +1,3 @@
-# pands_project
-
 # Programming & Scripting Project
 
 By Stephen Kerr
@@ -8,7 +6,7 @@ By Stephen Kerr
 In this Repository I will submit my main project assessment for the Module Programming & Scripting taught by Andrew Beatty (email: andrew.beatty@atu.ie) for my HDIP in Computing and Data Analytics.
 
 The following Problem Statment was assinged: 
->>'This project concerns the well-known Fisher’s Iris data set. You must research the data set
+>'This project concerns the well-known Fisher’s Iris data set. You must research the data set
 and write documentation and code (in Python) to investigate it. An online search for
 information on the data set will convince you that many people have investigated it
 previously. You are expected to be able to break this project into several smaller tasks that
