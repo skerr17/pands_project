@@ -21,4 +21,5 @@ are easier to solve, and to plug these together after they have been completed.'
 ## Table of Contenets 
 
 - [iris.data](https://github.com/skerr17/pands_project/blob/main/iris.data) - This file contains the famous Iris Data that was sourced from - [XXX]().
-- [analysis.py](https://github.com/skerr17/pands_project/blob/main/analysis.py) - This program contains the code for main analysis of the Iris Data.  
+- [analysis.py](https://github.com/skerr17/pands_project/blob/main/analysis.py) - This program contains the code for main analysis of the Iris Data. 
+- [requirements.txt](https://github.com/skerr17/pands_project/blob/main/requirements.txt) - This file contains the dependencies required to run the code in this repositroy. 
