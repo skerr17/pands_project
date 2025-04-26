@@ -1,3 +1,4 @@
+# analysis.py
 # This program is the central analysis file for the Programming and Scripting Module.
 # It imports the Iris Data and perfoms the analysis on it.
 # Author: Stephen Kerr
@@ -11,9 +12,10 @@ import numpy as np
 # import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt
 
-# import tabulate - For nice tables 
-# # Reference: https://pypi.org/project/tabulate/
+# import tabulate - For nice tables - Reference: https://pypi.org/project/tabulate/
 from tabulate import tabulate 
+
+
 
 
 
@@ -46,11 +48,17 @@ with open('iris_descriptive_stats.txt', 'w') as f:
     f.write(tabulate(iris_descriptive_stats_by_species.stack(future_stack=True), headers='keys', tablefmt='grid'))
 
 
+
+
+
+
+
+
+
 # Histograms for each variable to a .png file
 # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.hist.html
 # Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
 # Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html
-
 
 
 # Create a list of the variables to plot
@@ -94,6 +102,13 @@ plt.tight_layout()
 plt.savefig('iris_histograms.png')
 
 
+
+
+
+
+
+
+
 # Scatter Plot of each pair of variables
 # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
 
@@ -125,7 +140,8 @@ plt.tight_layout()
 plt.savefig('iris_scatter.png')
 
 
-# show the plot
-plt.show()
 
 
+if __name__ == "__main__":
+    # show the plot
+    plt.show()
