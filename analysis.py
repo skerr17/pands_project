@@ -1,5 +1,5 @@
 # analysis.py
-# This program is the central analysis file for the Programming and Scripting Module.
+# This program is the central analysis file for the Programming and Scripting Module main project.
 # It imports the Iris Data and perfoms the analysis on it.
 # Author: Stephen Kerr
 
@@ -30,8 +30,8 @@ def generate_descriptive_statistics(data):
     data (DataFrame): The input data to analyze.
     
     Returns:
-    DataFrame: A DataFrame containing the descriptive statistics.
-    creates a text file with the descriptive statistics.
+        DataFrame: A DataFrame containing the descriptive statistics.
+        Creates a text file with the descriptive statistics.
     """
     # Defining the descriptive statistics globally across all species
     # Calculate the descriptive statistics for the iris data
@@ -55,20 +55,59 @@ def generate_descriptive_statistics(data):
         f.write('\n\n')
         # Write the descriptive statistics for each species to the file
         f.write('===Descriptive Statistics by Species===\n')
-        f.write(tabulate(stats_by_species.stack(future_stack=True), headers='keys', tablefmt='grid'))
+        f.write(tabulate(stats_by_species.stack(), headers='keys', tablefmt='grid'))
     
     return global_descriptive_stats, stats_by_species
 
 
+def prepare_data(data):
+    """
+    Prepares the data for the analysis plots. 
+
+    Parameters:
+        data (DataFrame): The input data to prepare.
+    
+    Returns:
+        variables (list): A list of the variables to plot.
+        variables_titles (list): A list of titles for the histograms.
+        species (list): A list of unique species in the data.
+        format_species (list): A list of formatted species names for the legend.
+        colors (list): A list of colors for each species.
+        labels (list): A list of labels for each species.
+    """
+
+    # Create a list of the variables to plot
+    variables = data.columns.drop('species') # ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+
+    # Create a list of titles for the histograms
+    variables_titles = [s.replace('_', ' ').title() for s in variables] # ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
+
+    # Get the unique species from the data
+    species = data['species'].unique() # ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+
+    # Format the species names for the legend
+    format_species = [s.replace('Iris-', '').capitalize() for s in species] # ['Setosa', 'Versicolor', 'Virginica']
+
+    # Define colors for each species
+    colors = ['red', 'green', 'blue'] # Colors for each species
+    labels = format_species # Labels for each species
+
+    return variables, variables_titles, species, format_species, colors, labels
 
 
 
-def plot_histograms(data):
+def plot_histograms(data, variables, variables_titles, species, format_species, colors, labels):
     '''
-    Creates the Histograms for each variable with the different speices colour coded to a .png file
+    Creates the Histograms for each variable with the different species colour coded to a .png file
     
     Parameters: 
         data (DataFrame): The input data to plot in histograms.
+        variables (list): A list of the variables to plot.
+        variables_titles (list): A list of titles for the histograms.
+        species (list): A list of unique species in the data.
+        format_species (list): A list of formatted species names for the legend.
+        colors (list): A list of colors for each species.
+        labels (list): A list of labels for each species.
     
     Returns:
         None: The function saves the histograms as a .png file.
@@ -78,24 +117,12 @@ def plot_histograms(data):
     Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html
     '''
 
-    # Create a list of the variables to plot
-    variables = data.columns.drop('species') # ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-
-    # Create a list of titles for the histograms
-    variables_titles = [s.replace('_', ' ').title() for s in variables] # ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
-
-    # Get the unique species from the data
-    species = data['species'].unique() # ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
-
-    # Format the species names for the legend
-    format_species = [s.replace('Iris-', '').capitalize() for s in species] # ['Setosa', 'Versicolor', 'Virginica']
-
-    # Define colors for each species
-    colors = ['red', 'green', 'blue'] # Colors for each species
-    labels = format_species # Labels for each species
 
     # Set the figure size
     plt.figure(figsize=(12, 12))
+
+    # plot index
+    plot_index = 1
 
     # Loop through each variable and create a subplot
     for i, variable in enumerate(variables):
@@ -104,7 +131,8 @@ def plot_histograms(data):
             # Filter the data for the current species
             species_data = data[data['species'] == specie][variable]
             # Plot the histogram for the current species
-            plt.hist(species_data, bins=10, alpha=0.7, color=colors[j], label=labels[j], edgecolor='black')
+            plt.hist(species_data, bins=10, alpha=0.7, 
+                     color=colors[j], label=labels[j], edgecolor='black')
         
         # Add title, labels, and legend
         plt.title(f'Frequency of {variables_titles[i]} Across Species')
@@ -112,14 +140,14 @@ def plot_histograms(data):
         plt.ylabel('Frequency')
         plt.legend()
 
-        # Adjust layout to prevent overlap
-        plt.tight_layout()
+    # Adjust layout to prevent overlap
+    plt.tight_layout()
 
-        # Save the plot as a PNG file
-        plt.savefig('iris_histograms.png')
+    # Save the plot as a PNG file
+    plt.savefig('iris_histograms.png')
 
 
-def plot_scatter(data):
+def plot_scatter(data, variables, variables_titles, species, format_species, colors, labels):
     '''
     # Scatter Plot of each pair of variables
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
@@ -128,37 +156,28 @@ def plot_scatter(data):
     # set the figure size
     plt.figure(figsize=(12, 12))
 
-    # Create a list of the variables to plot
-    variables = data.columns.drop('species') # ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-
-    # Create a list of titles for the histograms
-    variables_titles = [s.replace('_', ' ').title() for s in variables] # ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
-
-    # Get the unique species from the data
-    species = data['species'].unique() # ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
-
-    # Format the species names for the legend
-    format_species = [s.replace('Iris-', '').capitalize() for s in species] # ['Setosa', 'Versicolor', 'Virginica']
-
-    # Define colors for each species
-    colors = ['red', 'green', 'blue'] # Colors for each species
-    labels = format_species # Labels for each species
+    # plot index 
+    plot_index = 1
 
     # Loop through each variable and create a subplot
-    for i, variable in enumerate(variables):
-        plt.subplot(2, 2, i + 1)  # Create a 2x2 grid of subplots
-        for j, specie in enumerate(species):
-            # Filter the data for the current species
-            species_data = data[data['species'] == specie]
-            # Plot the scatter plot for the current species
-            plt.scatter(species_data[variable], species_data[variables[i - 1]], 
-                        label=labels[j], color=colors[j], alpha=0.7)
-        
-        # Add title, labels, and legend
-        plt.title(f'{variables_titles[i]} vs {variables_titles[i - 1]}')
-        plt.xlabel(f'{variables_titles[i]} (cm)')
-        plt.ylabel(f'{variables_titles[i - 1]} (cm)')
-        plt.legend()
+    for i, variable_1 in enumerate(variables):
+        for j, variable_2 in enumerate(variables):
+            if i >= j:
+                continue
+            plt.subplot(len(variables), len(variables), plot_index) # Create a grid of subplots
+            for k, specie in enumerate(species):
+                # Filter the data for the current species
+                species_data = data[data['species'] == specie]
+                # Plot the scatter plot for the current species
+                plt.scatter(species_data[variable_1], species_data[variable_2], 
+                            label=labels[k], color=colors[k], alpha=0.7)
+            
+            # Add title, labels, and legend
+            plt.title(f'{variable_1} vs {variable_2}')
+            plt.xlabel(f'{variable_1} (cm)')
+            plt.ylabel(f'{variable_2} (cm)')
+            plt.legend()
+            plot_index += 1
 
     # Adjust layout to prevent overlap
     plt.tight_layout()
@@ -188,22 +207,30 @@ def main():
     # generate descriptive statistics
     global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data)
 
+    # prepare the data for plotting
+    variables, variables_titles, species, format_species, colors, labels = prepare_data(iris_data)
+
     # print the descriptive statistics to the console
     print('===Global Descriptive Statistics===\n')
     print(tabulate(global_iris_descriptive_stats, headers='keys', tablefmt='grid'))
     print('\n\n')
     print('===Descriptive Statistics by Species===\n')
-    print(tabulate(iris_descriptive_stats_by_species.stack(future_stack=True), headers='keys', tablefmt='grid'))
+    print(tabulate(iris_descriptive_stats_by_species.stack(), headers='keys', tablefmt='grid'))
 
     # plot histograms
-    plot_histograms(iris_data)
+    plot_histograms(iris_data, variables, variables_titles, species, format_species, colors, labels)
     
     # plot scatter plots
-    plot_scatter(iris_data)
+    plot_scatter(iris_data, variables, variables_titles, species, format_species, colors, labels)
 
     # show the plots
     plt.show()
 
+    # print a message to indicate that the analysis is complete
+    print("Analysis complete: \n" 
+            "The histograms are saved to the iris_histograms.png\n"
+            "The scatter plots are saved to the iris_scatter.png\n"
+            "The descriptive statistics are saved to the iris_descriptive_stats.txt\n")
 
 
  
