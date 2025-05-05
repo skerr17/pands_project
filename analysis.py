@@ -19,6 +19,9 @@ from tabulate import tabulate
 # imported pathlib as it has better error handling and is more robust and OS independent than os.path
 from pathlib import Path
 
+# import seaborn as sns - Reference: https://seaborn.pydata.org/index.html
+import seaborn as sns
+
 
 # Main function to run the analysis
 def main():
@@ -62,6 +65,9 @@ def main():
     
     # plot scatter plots
     plot_scatter(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+
+    # plot pairs plots
+    pairsplots(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
 
     # show the plots
     plt.show()
@@ -254,7 +260,41 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
     plt.savefig(output_dir /f'iris_scatter.png')
 
     
+def pairsplots(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
+    '''
+    # Pairs Plot of each pair of variables
+    # Reference: https://seaborn.pydata.org/generated/seaborn.pairplot.html
 
+    parameters:
+        data (DataFrame): The input data to plot in pairs plots.
+        variables (list): A list of the variables to plot.
+        variables_titles (list): A list of titles for the histograms.
+        species (list): A list of unique species in the data.
+        format_species (list): A list of formatted species names for the legend.
+        colors (list): A list of colors for each species.
+        labels (list): A list of labels for each species.
+        output_dir (Path): The directory to save the output files.
+    
+    returns:
+        None: The function saves pairs plots to a single .png file.
+    '''
+    # reference: https://seaborn.pydata.org/generated/seaborn.pairplot.html 
+    # reference: https://pytutorial.com/python-seaborn-pairplot-visualize-data-relationships/
+
+    iris_pairplot = sns.pairplot(
+                                data=data,
+                                hue='species', # set the hue to be the species
+                                kind='reg', # set the kind of plot to be a regression plot
+                                palette=colors, # set the colours of the species
+                                diag_kind='kde', # set the diagonal to be a kde plot
+                                height=2.5, # set the size of the figure
+                                )
+
+    # add the title to the figure
+    iris_pairplot.fig.suptitle('Pairplot of the Iris Dataset', y=1.02)
+
+    # save the plot as a PNG file
+    plt.savefig(output_dir / 'iris_pairplot.png')
 
 if __name__ == "__main__":
     # main function to run the analysis
