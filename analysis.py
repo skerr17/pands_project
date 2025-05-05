@@ -20,6 +20,60 @@ from tabulate import tabulate
 from pathlib import Path
 
 
+# Main function to run the analysis
+def main():
+    """
+    Main function to run the analysis using the Iris Data Set.
+    """
+
+    # create a directory for the output files
+    output_dir = Path('outputs')
+    output_dir.mkdir(parents=True, exist_ok=True) # Create the directory if it doesn't exist
+
+    # Read the data from the iris.data file
+    data_path = Path('iris.data') # Path to the iris data file
+    # Check if the file exists
+    if data_path.exists():
+        # Read the data into a pandas dataframe # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html
+        # Add column names to the dataframe from the iris documentation # Reference: https://archive.ics.uci.edu/dataset/53/iris
+        iris_data = pd.read_csv(data_path, header=None, usecols=[0, 1, 2, 3, 4], 
+                    names=['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species'])
+    else:
+        print(f"Error: The file {data_path} does not exist.")
+        return
+            
+    # generate descriptive statistics
+    global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data)
+
+    # prepare the data for plotting
+    variables, variables_titles, species, format_species, colors, labels = prepare_data(iris_data)
+
+    # print the descriptive statistics to the console
+    print('===Global Descriptive Statistics===\n')
+    print(tabulate(global_iris_descriptive_stats, headers='keys', tablefmt='grid'))
+    print('\n\n')
+    print('===Descriptive Statistics by Species===\n')
+    print(tabulate(iris_descriptive_stats_by_species.stack(), headers='keys', tablefmt='grid'))
+
+    # plot histograms
+    plot_histograms(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+    
+    # plot scatter plots
+    plot_scatter(iris_data, variables, variables_titles, species, format_species, colors, labels)
+
+    # show the plots
+    plt.show()
+
+    # print a message to indicate that the analysis is complete
+    print("Analysis complete: \n" 
+            "The histograms are saved to the iris_histograms.png\n"
+            "The scatter plots are saved to the iris_scatter.png\n"
+            "The descriptive statistics are saved to the iris_descriptive_stats.txt\n")
+ 
+    
+
+
+
 def generate_descriptive_statistics(data):
     """
     Generate descriptive statistics (Global & by Species) 
@@ -96,7 +150,7 @@ def prepare_data(data):
 
 
 
-def plot_histograms(data, variables, variables_titles, species, format_species, colors, labels):
+def plot_histograms(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
     '''
     Creates the Histograms for each variable with the different species colour coded to a .png file
     
@@ -117,16 +171,11 @@ def plot_histograms(data, variables, variables_titles, species, format_species, 
     Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html
     '''
 
-
-    # Set the figure size
-    plt.figure(figsize=(12, 12))
-
-    # plot index
-    plot_index = 1
-
     # Loop through each variable and create a subplot
     for i, variable in enumerate(variables):
-        plt.subplot(2, 2, i + 1)  # Create a 2x2 grid of subplots
+        # Set the figure size
+        plt.figure(figsize=(12, 12))
+       
         for j, specie in enumerate(species):
             # Filter the data for the current species
             species_data = data[data['species'] == specie][variable]
@@ -140,11 +189,13 @@ def plot_histograms(data, variables, variables_titles, species, format_species, 
         plt.ylabel('Frequency')
         plt.legend()
 
-    # Adjust layout to prevent overlap
-    plt.tight_layout()
-
-    # Save the plot as a PNG file
-    plt.savefig('iris_histograms.png')
+        # Save the plot as a PNG file
+        filename = output_dir / f'{variable}_histogram.png'
+        # Adjust layout to prevent overlap
+        plt.tight_layout()
+        plt.savefig(filename)
+        plt.close() # Close the plot to free up memory
+        
 
 
 def plot_scatter(data, variables, variables_titles, species, format_species, colors, labels):
@@ -187,54 +238,7 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
 
     
 
-# Main function to run the analysis
-def main():
-    """
-    Main function to run the analysis using the Iris Data Set.
-    """
-    # Read the data from the iris.data file
-    data_path = Path('iris.data') # Path to the iris data file
-    # Check if the file exists
-    if data_path.exists():
-        # Read the data into a pandas dataframe # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html
-        # Add column names to the dataframe from the iris documentation # Reference: https://archive.ics.uci.edu/dataset/53/iris
-        iris_data = pd.read_csv(data_path, header=None, usecols=[0, 1, 2, 3, 4], 
-                    names=['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species'])
-    else:
-        print(f"Error: The file {data_path} does not exist.")
-        return
-            
-    # generate descriptive statistics
-    global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data)
 
-    # prepare the data for plotting
-    variables, variables_titles, species, format_species, colors, labels = prepare_data(iris_data)
-
-    # print the descriptive statistics to the console
-    print('===Global Descriptive Statistics===\n')
-    print(tabulate(global_iris_descriptive_stats, headers='keys', tablefmt='grid'))
-    print('\n\n')
-    print('===Descriptive Statistics by Species===\n')
-    print(tabulate(iris_descriptive_stats_by_species.stack(), headers='keys', tablefmt='grid'))
-
-    # plot histograms
-    plot_histograms(iris_data, variables, variables_titles, species, format_species, colors, labels)
-    
-    # plot scatter plots
-    plot_scatter(iris_data, variables, variables_titles, species, format_species, colors, labels)
-
-    # show the plots
-    plt.show()
-
-    # print a message to indicate that the analysis is complete
-    print("Analysis complete: \n" 
-            "The histograms are saved to the iris_histograms.png\n"
-            "The scatter plots are saved to the iris_scatter.png\n"
-            "The descriptive statistics are saved to the iris_descriptive_stats.txt\n")
-
-
- 
-    
 if __name__ == "__main__":
     # main function to run the analysis
     main()
