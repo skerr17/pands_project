@@ -84,6 +84,7 @@ def generate_descriptive_statistics(data, output_dir):
     
     Parameters:
     data (DataFrame): The input data to analyze.
+    output_dir (Path): The directory to save the output file.
     
     Returns:
         DataFrame: A DataFrame containing the descriptive statistics.
@@ -154,7 +155,7 @@ def prepare_data(data):
 
 def plot_histograms(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
     '''
-    Creates the Histograms for each variable with the different species colour coded to a .png file
+    Creates the Histograms for each variable with the different species colour coded to individual .png files in hte output folder.
     
     Parameters: 
         data (DataFrame): The input data to plot in histograms.
@@ -164,9 +165,10 @@ def plot_histograms(data, variables, variables_titles, species, format_species, 
         format_species (list): A list of formatted species names for the legend.
         colors (list): A list of colors for each species.
         labels (list): A list of labels for each species.
+        output_dir (Path): The directory to save the output files.
     
     Returns:
-        None: The function saves the histograms as a .png file.
+        None: The function saves histograms to .png files.
 
     Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.hist.html
     Reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
@@ -204,6 +206,19 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
     '''
     # Scatter Plot of each pair of variables
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
+
+    parameters:
+        data (DataFrame): The input data to plot in scatter plots.
+        variables (list): A list of the variables to plot.
+        variables_titles (list): A list of titles for the histograms.
+        species (list): A list of unique species in the data.
+        format_species (list): A list of formatted species names for the legend.
+        colors (list): A list of colors for each species.
+        labels (list): A list of labels for each species.
+        output_dir (Path): The directory to save the output files.
+    
+    returns:
+        None: The function saves scatter plots to a single .png file.
     '''
     
     # set the figure size
