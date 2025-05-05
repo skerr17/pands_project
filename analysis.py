@@ -59,7 +59,7 @@ def main():
     plot_histograms(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
     
     # plot scatter plots
-    plot_scatter(iris_data, variables, variables_titles, species, format_species, colors, labels)
+    plot_scatter(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
 
     # show the plots
     plt.show()
@@ -198,7 +198,7 @@ def plot_histograms(data, variables, variables_titles, species, format_species, 
         
 
 
-def plot_scatter(data, variables, variables_titles, species, format_species, colors, labels):
+def plot_scatter(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
     '''
     # Scatter Plot of each pair of variables
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
@@ -234,7 +234,7 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
     plt.tight_layout()
 
     # Save the plot as a PNG file
-    plt.savefig('iris_scatter.png')
+    plt.savefig(output_dir /f'iris_scatter.png')
 
     
 
