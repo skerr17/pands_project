@@ -25,12 +25,15 @@ def main():
     """
     Main function to run the analysis using the Iris Data Set.
     """
+
     # create a directory for the output files
     output_dir = Path('outputs')
     output_dir.mkdir(parents=True, exist_ok=True) # Create the directory if it doesn't exist
 
     # Read the data from the iris.data file
-    data_path = Path('iris.data') # Path to the iris data file
+    raw_data_dir = Path('raw_data') # Path to the iris data file
+    raw_data_dir.mkdir(parents=True, exist_ok=True) # Create the directory if it doesn't exist
+    data_path = raw_data_dir / 'iris.data' # Path to the iris data file
     # Check if the file exists
     if data_path.exists():
         # Read the data into a pandas dataframe # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html
