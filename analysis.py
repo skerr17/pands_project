@@ -25,7 +25,6 @@ def main():
     """
     Main function to run the analysis using the Iris Data Set.
     """
-
     # create a directory for the output files
     output_dir = Path('outputs')
     output_dir.mkdir(parents=True, exist_ok=True) # Create the directory if it doesn't exist
@@ -43,7 +42,7 @@ def main():
         return
             
     # generate descriptive statistics
-    global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data)
+    global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data, output_dir)
 
     # prepare the data for plotting
     variables, variables_titles, species, format_species, colors, labels = prepare_data(iris_data)
@@ -74,11 +73,11 @@ def main():
 
 
 
-def generate_descriptive_statistics(data):
+def generate_descriptive_statistics(data, output_dir):
     """
     Generate descriptive statistics (Global & by Species) 
     for the given data and writes it to a text file titled
-    'iris_descriptive_stats.txt'.
+    'iris_descriptive_stats.txt' in the output folder.
     
     Parameters:
     data (DataFrame): The input data to analyze.
@@ -102,7 +101,7 @@ def generate_descriptive_statistics(data):
     # Write the  Description Stats to a Text File
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.stack.html - used to make the data more readable
-    with open('iris_descriptive_stats.txt', 'w') as f:
+    with open(output_dir / 'iris_descriptive_stats.txt', 'w') as f:
         # Write the global descriptive statistics to the file
         f.write('===Global Descriptive Statistics===\n')
         f.write(tabulate(global_descriptive_stats, headers='keys', tablefmt='grid'))
