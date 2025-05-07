@@ -34,7 +34,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True) # Create the directory if it doesn't exist
 
     # Read the data from the iris.data file
-    raw_data_dir = Path('raw_data') # Path to the iris data file
+    raw_data_dir = Path('inputs') # Path to the iris data file
     raw_data_dir.mkdir(parents=True, exist_ok=True) # Create the directory if it doesn't exist
     data_path = raw_data_dir / 'iris.data' # Path to the iris data file
     # Check if the file exists

@@ -1,4 +1,4 @@
-# Programming & Scripting Project
+# **Programming & Scripting Project**
 
 By Stephen Kerr
 
