@@ -141,6 +141,16 @@ def generate_descriptive_statistics(data, output_dir, variables_titles, format_s
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.describe.html
     global_descriptive_stats = formatted_data.describe()
 
+    # format global descriptive statistics to be more readable
+    global_descriptive_stats = global_descriptive_stats.rename(index={'count': 'Count',
+                                                     'mean': 'Mean',
+                                                     'std': 'Standard Deviation',
+                                                     'min': 'Minimum',
+                                                     '25%': '25th Percentile',
+                                                     '50%': 'Median',
+                                                     '75%': '75th Percentile',
+                                                     'max': 'Maximum'})
+
 
     # # Print the descriptive statistics for each species
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
