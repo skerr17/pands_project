@@ -46,12 +46,12 @@ def main():
     else:
         print(f"Error: The file {data_path} does not exist.")
         return
-            
-    # generate descriptive statistics
-    global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data, output_dir)
 
     # prepare the data for plotting
     variables, variables_titles, species, format_species, colors, labels = prepare_data(iris_data)
+
+    # generate descriptive statistics
+    global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data, output_dir, variables_titles, format_species)
 
     # print the descriptive statistics to the console
     print('===Global Descriptive Statistics===\n')
@@ -79,50 +79,6 @@ def main():
             "The descriptive statistics are saved to the iris_descriptive_stats.txt\n")
  
     
-
-
-
-def generate_descriptive_statistics(data, output_dir):
-    """
-    Generate descriptive statistics (Global & by Species) 
-    for the given data and writes it to a text file titled
-    'iris_descriptive_stats.txt' in the output folder.
-    
-    Parameters:
-    data (DataFrame): The input data to analyze.
-    output_dir (Path): The directory to save the output file.
-    
-    Returns:
-        DataFrame: A DataFrame containing the descriptive statistics.
-        Creates a text file with the descriptive statistics.
-    """
-    # Defining the descriptive statistics globally across all species
-    # Calculate the descriptive statistics for the iris data
-    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.describe.html
-    global_descriptive_stats = data.describe()
-
-
-    # # Print the descriptive statistics for each species
-    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
-    # Reference: https://www.w3schools.com/python/pandas/ref_df_groupby.asp
-    stats_by_species =data.groupby('species').describe()
-
-
-    # Write the  Description Stats to a Text File
-    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html
-    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.stack.html - used to make the data more readable
-    with open(output_dir / 'iris_descriptive_stats.txt', 'w') as f:
-        # Write the global descriptive statistics to the file
-        f.write('===Global Descriptive Statistics===\n')
-        f.write(tabulate(global_descriptive_stats, headers='keys', tablefmt='grid'))
-        f.write('\n\n')
-        # Write the descriptive statistics for each species to the file
-        f.write('===Descriptive Statistics by Species===\n')
-        f.write(tabulate(stats_by_species.stack(), headers='keys', tablefmt='grid'))
-    
-    return global_descriptive_stats, stats_by_species
-
-
 def prepare_data(data):
     """
     Prepares the data for the analysis plots. 
@@ -156,6 +112,57 @@ def prepare_data(data):
     labels = format_species # Labels for each species
 
     return variables, variables_titles, species, format_species, colors, labels
+
+
+
+def generate_descriptive_statistics(data, output_dir, variables_titles, format_species):
+    """
+    Generate descriptive statistics (Global & by Species) 
+    for the given data and writes it to a text file titled
+    'iris_descriptive_stats.txt' in the output folder.
+    
+    Parameters:
+    data (DataFrame): The input data to analyze.
+    output_dir (Path): The directory to save the output file.
+    variables_titles (list): A list of titles for the variables.
+    format_species (list): A list of formatted species names.
+    
+    Returns:
+        DataFrame: A DataFrame containing the descriptive statistics.
+        Creates a text file with the descriptive statistics.
+    """
+    # format the data to be more readable
+    formatted_data = data.copy()
+    formatted_data.columns = variables_titles + ['Species']# rename the columns to be more readable
+    formatted_data['Species'] = formatted_data['Species'].replace(format_species) # rename the species to be more readable
+   
+    # Defining the descriptive statistics globally across all species
+    # Calculate the descriptive statistics for the iris data
+    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.describe.html
+    global_descriptive_stats = formatted_data.describe()
+
+
+    # # Print the descriptive statistics for each species
+    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
+    # Reference: https://www.w3schools.com/python/pandas/ref_df_groupby.asp
+    stats_by_species =formatted_data.groupby('Species').describe()
+
+
+    # Write the  Description Stats to a Text File
+    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html
+    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.stack.html - used to make the data more readable
+    with open(output_dir / 'iris_descriptive_stats.txt', 'w') as f:
+        # Write the global descriptive statistics to the file
+        f.write('===Global Descriptive Statistics===\n')
+        f.write(tabulate(global_descriptive_stats, headers='keys', tablefmt='grid'))
+        f.write('\n\n')
+        # Write the descriptive statistics for each species to the file
+        f.write('===Descriptive Statistics by Species===\n')
+        f.write(tabulate(stats_by_species.stack(), headers='keys', tablefmt='grid'))
+    
+    return global_descriptive_stats, stats_by_species
+
+
 
 
 
