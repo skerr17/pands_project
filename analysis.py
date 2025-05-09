@@ -25,6 +25,8 @@ import seaborn as sns
 # import PCA from sklearn.decomposition - Reference: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
 from sklearn.decomposition import PCA
 
+# import StandardScaler from sklearn.preprocessing - Reference: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+from sklearn.preprocessing import StandardScaler
 
 # Main function to run the analysis
 def main():
@@ -64,13 +66,13 @@ def main():
     print(tabulate(iris_descriptive_stats_by_species.stack(), headers='keys', tablefmt='grid'))
 
     # plot histograms
-    plot_histograms(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+    plot_histograms(iris_data, variables, variables_titles, species, colors, labels, output_dir)
     
     # plot scatter plots
-    plot_scatter(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+    plot_scatter(iris_data, variables, variables_titles, species, colors, labels, output_dir)
 
     # plot pairs plots
-    pairsplots(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+    pairsplots(iris_data, format_species, colors, output_dir)
 
     # plot correlation matrix heatmap
     corrleation_matrix_heatmap(iris_data, variables_titles, output_dir)
@@ -198,10 +200,7 @@ def generate_descriptive_statistics(data, output_dir, variables_titles, species,
     return global_descriptive_stats, stats_by_species
 
 
-
-
-
-def plot_histograms(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
+def plot_histograms(data, variables, variables_titles, species, colors, labels, output_dir):
     '''
     Creates the Histograms for each variable with the different species colour coded to individual .png files in hte output folder.
     
@@ -210,7 +209,6 @@ def plot_histograms(data, variables, variables_titles, species, format_species, 
         variables (list): A list of the variables to plot.
         variables_titles (list): A list of titles for the histograms.
         species (list): A list of unique species in the data.
-        format_species (list): A list of formatted species names for the legend.
         colors (list): A list of colors for each species.
         labels (list): A list of labels for each species.
         output_dir (Path): The directory to save the output files.
@@ -250,7 +248,7 @@ def plot_histograms(data, variables, variables_titles, species, format_species, 
         
 
 
-def plot_scatter(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
+def plot_scatter(data, variables, variables_titles, species, colors, labels, output_dir):
     '''
     # Scatter Plot of each pair of variables
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
@@ -260,7 +258,6 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
         variables (list): A list of the variables to plot.
         variables_titles (list): A list of titles for the histograms.
         species (list): A list of unique species in the data.
-        format_species (list): A list of formatted species names for the legend.
         colors (list): A list of colors for each species.
         labels (list): A list of labels for each species.
         output_dir (Path): The directory to save the output files.
@@ -304,19 +301,15 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
 
 
     
-def pairsplots(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
+def pairsplots(data, format_species, colors, output_dir):
     '''
     # Pairs Plot of each pair of variables
     # Reference: https://seaborn.pydata.org/generated/seaborn.pairplot.html
 
     parameters:
         data (DataFrame): The input data to plot in pairs plots.
-        variables (list): A list of the variables to plot.
-        variables_titles (list): A list of titles for the histograms.
-        species (list): A list of unique species in the data.
         format_species (list): A list of formatted species names for the legend.
         colors (list): A list of colors for each species.
-        labels (list): A list of labels for each species.
         output_dir (Path): The directory to save the output files.
     
     returns:
@@ -366,12 +359,7 @@ def corrleation_matrix_heatmap(data, variables_titles, output_dir):
 
     parameters:
         data (DataFrame): The input data to plot in heatmaps.
-        variables (list): A list of the variables to plot.
         variables_titles (list): A list of titles for the histograms.
-        species (list): A list of unique species in the data.
-        format_species (list): A list of formatted species names for the legend.
-        colors (list): A list of colors for each species.
-        labels (list): A list of labels for each species.
         output_dir (Path): The directory to save the output files.
     
     returns:
@@ -417,19 +405,25 @@ def pca_analysis(data, variables, species, colors, output_dir):
     parameters:
         data (DataFrame): The input data to plot in heatmaps.
         variables (list): A list of the variables to plot.
-        variables_titles (list): A list of titles for the histograms.
         species (list): A list of unique species in the data.
-        format_species (list): A list of formatted species names for the legend.
         colors (list): A list of colors for each species.
-        labels (list): A list of labels for each species.
         output_dir (Path): The directory to save the output files.
     
     returns:
-        None: The function saves heatmaps to a single .png file.
+        None: The function saves a PCA Scatter Plot to a single .png file.
     '''
+
+
+    # standardize the data
+    # Reference: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+    scaler = StandardScaler()
+    # fit the scaler to the data and transform the data
+    scaled_data = scaler.fit_transform(data[variables])
+
     # perform PCA
     pca = PCA(n_components=2) # set the number of components to 2
-    pca_result = pca.fit_transform(data[variables]) # fit the PCA model to the data
+    # fit the PCA model to the scaled data
+    pca_result = pca.fit_transform(scaled_data) 
 
     # create Dataframe for PCA results
     pca_df = pd.DataFrame(data=pca_result, columns=['PC1', 'PC2']) # create a DataFrame for the PCA results
