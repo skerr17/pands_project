@@ -78,9 +78,6 @@ def main():
     # perform PCA analysis
     pca_analysis(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
 
-    # show the plots
-    # plt.show()
-
     # print a message to indicate that the analysis is complete
     print("Analysis complete: \n" 
             "The following has been produced into the 'outputs' directory:\n"
@@ -303,6 +300,7 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
 
     # Save the plot as a PNG file
     plt.savefig(output_dir /f'iris_scatter.png')
+    plt.close() # Close the plot to free up memory
 
 
     
@@ -341,6 +339,7 @@ def pairsplots(data, variables, variables_titles, species, format_species, color
 
     # save the plot as a PNG file
     plt.savefig(output_dir / 'iris_pairplot.png')
+    plt.close() # Close the plot to free up memory
 
 
 
@@ -380,6 +379,7 @@ def corrleation_matrix_heatmap(data, variables, variables_titles, species, forma
 
     # save the plot as a PNG file
     plt.savefig(output_dir / 'iris_correlation_matrix.png')
+    plt.close() # Close the plot to free up memory
 
 
 
@@ -428,6 +428,7 @@ def pca_analysis(data, variables, variables_titles, species, format_species, col
     plt.ylabel('Principal Component 2') # add y label to the figure
     plt.legend(title='Species') # add legend to the figure
     plt.savefig(output_dir / 'iris_pca.png') # save the plot as a PNG file
+    plt.close() # Close the plot to free up memory
 
 
 if __name__ == "__main__":
