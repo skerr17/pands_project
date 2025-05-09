@@ -73,10 +73,10 @@ def main():
     pairsplots(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
 
     # plot correlation matrix heatmap
-    corrleation_matrix_heatmap(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+    corrleation_matrix_heatmap(iris_data, variables_titles, output_dir)
 
     # perform PCA analysis
-    pca_analysis(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+    pca_analysis(iris_data, variables, species, colors, output_dir)
 
     # print a message to indicate that the analysis is complete
     print("Analysis complete: \n" 
@@ -337,13 +337,27 @@ def pairsplots(data, variables, variables_titles, species, format_species, color
     # add the title to the figure
     iris_pairplot.fig.suptitle('Pairplot of the Iris Dataset', y=1.02)
 
+    # Remove the default legend
+    iris_pairplot._legend.remove()
+
+    # Create new legend with custom labels
+    handles = iris_pairplot._legend_data.values()
+    iris_pairplot.fig.legend(
+        handles=handles,
+        labels=format_species,
+        title="Species",
+        loc='upper center',
+        bbox_to_anchor=(0.5, 1.05),
+        ncol=len(format_species)
+    )
+
     # save the plot as a PNG file
     plt.savefig(output_dir / 'iris_pairplot.png')
     plt.close() # Close the plot to free up memory
 
 
 
-def corrleation_matrix_heatmap(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
+def corrleation_matrix_heatmap(data, variables_titles, output_dir):
     '''
     # Correlation Matrix Heatmap of the Iris Dataset
     # Reference: https://seaborn.pydata.org/generated/seaborn.heatmap.html
@@ -371,8 +385,15 @@ def corrleation_matrix_heatmap(data, variables, variables_titles, species, forma
     plt.figure(figsize=(12, 12))
 
     # draw the heatmap with the mask and correct aspect ratio
-    sns.heatmap(corr_matrix, cmap='coolwarm', annot=True, fmt='.2f', square=True,
-                cbar_kws={"shrink": .8}, linewidths=.5)
+    sns.heatmap(corr_matrix, 
+                cmap='coolwarm', 
+                annot=True, 
+                fmt='.2f',
+                square=True,
+                cbar_kws={"shrink": .8}, 
+                linewidths=.5,
+                xticklabels=variables_titles,
+                yticklabels=variables_titles,)
 
     # add title to the figure
     plt.title('Correlation Matrix Heatmap of the Iris Dataset')
@@ -383,7 +404,7 @@ def corrleation_matrix_heatmap(data, variables, variables_titles, species, forma
 
 
 
-def pca_analysis(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
+def pca_analysis(data, variables, species, colors, output_dir):
     '''
     # PCA Analysis of the Iris Dataset 
     - Purpose of PCA is to reduce the dimensionality of the data while preserving as much variance as possible.

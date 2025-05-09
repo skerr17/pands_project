@@ -38,12 +38,14 @@ The Image below illustrates the Three Iris Flower Species and their anatomy (Ima
 
 ## Project Plan
 1. Researched the Iris dataset.
-2. Loaded and explored the dataset using python (and the python libraries listed in the [requirements.txt](https://github.com/skerr17/pands_project/blob/main/requirements.txt))
+2. Loaded and explored the dataset using python (and the python libraries listed in the [requirements.txt](https://github.com/skerr17/pands_project/blob/main/requirements.txt)).
 3. Wrote code to compute basic statistics.
 4. Created histograms to visualise the distribution of each variable.
 5. Generated scatter plots to study the relationships between variable pairs.
-6.  Created a pair plot to visualize relationships across all numeric features.
-7. Documented the analysis and committed each logical change to GitHub. 
+6. Created a pair plot to visualize relationships across all numeric features.
+7. Generated a Correlation Matrix Heatmap of the different features (Pearso Correlation Coefficient).
+8. Conducted Principal Component Analysis (PCA) to turn the 4 dimensional Iris Dataset to 2 dimensional.
+9. Documented the analysis and committed each logical change to GitHub.
 
 
 ## Table of Contents 
