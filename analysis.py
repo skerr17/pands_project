@@ -22,6 +22,9 @@ from pathlib import Path
 # import seaborn as sns - Reference: https://seaborn.pydata.org/index.html
 import seaborn as sns
 
+# import PCA from sklearn.decomposition - Reference: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+from sklearn.decomposition import PCA
+
 
 # Main function to run the analysis
 def main():
@@ -72,6 +75,9 @@ def main():
     # plot correlation matrix heatmap
     corrleation_matrix_heatmap(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
 
+    # perform PCA analysis
+    pca_analysis(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+
     # show the plots
     # plt.show()
 
@@ -83,6 +89,7 @@ def main():
             "\tScatter plot for each Iris Feature (saved together in the 'iris_scatter.png'),\n"
             "\tPairs plot for each Iris Feature in saved 'iris_pairplot.png',\n"
             "\tCorrelation Matrix Heatmap saved in the 'iris_correlation_matrix.png',\n"
+            "\tPCA Analysis saved in the 'iris_pca.png'.\n"
             )
  
     
@@ -297,6 +304,7 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
     # Save the plot as a PNG file
     plt.savefig(output_dir /f'iris_scatter.png')
 
+
     
 def pairsplots(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
     '''
@@ -333,6 +341,8 @@ def pairsplots(data, variables, variables_titles, species, format_species, color
 
     # save the plot as a PNG file
     plt.savefig(output_dir / 'iris_pairplot.png')
+
+
 
 def corrleation_matrix_heatmap(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
     '''
@@ -372,6 +382,42 @@ def corrleation_matrix_heatmap(data, variables, variables_titles, species, forma
     plt.savefig(output_dir / 'iris_correlation_matrix.png')
 
 
+
+def pca_analysis(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
+    '''
+    # PCA Analysis of the Iris Dataset
+    # Reference: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+    # Reference: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+
+    parameters:
+        data (DataFrame): The input data to plot in heatmaps.
+        variables (list): A list of the variables to plot.
+        variables_titles (list): A list of titles for the histograms.
+        species (list): A list of unique species in the data.
+        format_species (list): A list of formatted species names for the legend.
+        colors (list): A list of colors for each species.
+        labels (list): A list of labels for each species.
+        output_dir (Path): The directory to save the output files.
+    
+    returns:
+        None: The function saves heatmaps to a single .png file.
+    '''
+    # perform PCA
+    pca = PCA(n_components=2) # set the number of components to 2
+    pca_result = pca.fit_transform(data[variables]) # fit the PCA model to the data
+
+    # create Dataframe for PCA results
+    pca_df = pd.DataFrame(data=pca_result, columns=['PC1', 'PC2']) # create a DataFrame for the PCA results
+    pca_df['species'] = data['species'] # add the species column to the PCA results
+
+    # plot the PCA results
+    plt.figure(figsize=(12, 12)) # set the figure size
+    sns.scatterplot(data=pca_df, x='PC1', y='PC2', hue='species', palette=colors) # create a scatter plot of the PCA results
+    plt.title('PCA of the Iris Dataset') # add title to the figure
+    plt.xlabel('Principal Component 1') # add x label to the figure
+    plt.ylabel('Principal Component 2') # add y label to the figure
+    plt.legend(title='Species') # add legend to the figure
+    plt.savefig(output_dir / 'iris_pca.png') # save the plot as a PNG file
 
 
 if __name__ == "__main__":
