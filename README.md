@@ -46,6 +46,7 @@ The Image below illustrates the Three Iris Flower Species and their anatomy (Ima
 7. Generated a Correlation Matrix Heatmap of the different features (Pearso Correlation Coefficient).
 8. Conducted Principal Component Analysis (PCA) to turn the 4 dimensional Iris Dataset to 2 dimensional.
 9. Documented the analysis and committed each logical change to GitHub.
+10. Documented the analysis of the Iris dataset in to a juypeter Notebook.
 
 
 ## Table of Contents 
