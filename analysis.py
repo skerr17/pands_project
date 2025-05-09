@@ -51,7 +51,7 @@ def main():
     variables, variables_titles, species, format_species, colors, labels = prepare_data(iris_data)
 
     # generate descriptive statistics
-    global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data, output_dir, variables_titles, format_species)
+    global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data, output_dir, variables_titles, species, format_species)
 
     # print the descriptive statistics to the console
     print('===Global Descriptive Statistics===\n')
@@ -68,6 +68,9 @@ def main():
 
     # plot pairs plots
     pairsplots(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
+
+    # plot correlation matrix heatmap
+    corrleation_matrix_heatmap(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
 
     # show the plots
     plt.show()
@@ -115,7 +118,7 @@ def prepare_data(data):
 
 
 
-def generate_descriptive_statistics(data, output_dir, variables_titles, format_species):
+def generate_descriptive_statistics(data, output_dir, variables_titles, species, format_species):
     """
     Generate descriptive statistics (Global & by Species) 
     for the given data and writes it to a text file titled
@@ -134,7 +137,10 @@ def generate_descriptive_statistics(data, output_dir, variables_titles, format_s
     # format the data to be more readable
     formatted_data = data.copy()
     formatted_data.columns = variables_titles + ['Species']# rename the columns to be more readable
-    formatted_data['Species'] = formatted_data['Species'].replace(format_species) # rename the species to be more readable
+
+    # species formatting
+    species_mapping = {species[i]: format_species[i] for i in range(len(species))} # create a mapping of species to formatted species names
+    formatted_data['Species'] = formatted_data['Species'].replace(species_mapping) # rename the species to be more readable
    
     # Defining the descriptive statistics globally across all species
     # Calculate the descriptive statistics for the iris data
@@ -150,12 +156,23 @@ def generate_descriptive_statistics(data, output_dir, variables_titles, format_s
                                                      '50%': 'Median',
                                                      '75%': '75th Percentile',
                                                      'max': 'Maximum'})
-
-
     # # Print the descriptive statistics for each species
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
     # Reference: https://www.w3schools.com/python/pandas/ref_df_groupby.asp
     stats_by_species =formatted_data.groupby('Species').describe()
+
+    # format the descriptive statistics for each species to be more readable
+    stats_by_species = stats_by_species.rename(columns={
+        'count': 'Count',
+        'mean': 'Mean',
+        'std': 'Standard Deviation',
+        'min': 'Minimum',
+        '25%': '25th Percentile',
+        '50%': 'Median',
+        '75%': '75th Percentile',
+        'max': 'Maximum'},
+        )  # Had some issues finding a solution to the formatting of column names but got it to work using the columns parameter of the rename function
+    # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.rename.html
 
 
     # Write the  Description Stats to a Text File
@@ -312,6 +329,43 @@ def pairsplots(data, variables, variables_titles, species, format_species, color
 
     # save the plot as a PNG file
     plt.savefig(output_dir / 'iris_pairplot.png')
+
+def corrleation_matrix_heatmap(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
+    '''
+    # Correlation Matrix Heatmap of the Iris Dataset
+    # Reference: https://seaborn.pydata.org/generated/seaborn.heatmap.html
+    # Reference: https://www.geeksforgeeks.org/python-pandas-dataframe-corr/
+
+
+    parameters:
+        data (DataFrame): The input data to plot in heatmaps.
+        variables (list): A list of the variables to plot.
+        variables_titles (list): A list of titles for the histograms.
+        species (list): A list of unique species in the data.
+        format_species (list): A list of formatted species names for the legend.
+        colors (list): A list of colors for each species.
+        labels (list): A list of labels for each species.
+        output_dir (Path): The directory to save the output files.
+    
+    returns:
+        None: The function saves heatmaps to a single .png file.
+    '''
+
+    # calculate the correlation matrix and drops the species column as it is not a numeric column
+    corr_matrix = data.drop(columns=['species']).corr()
+
+    # set up the matplotlib figure
+    plt.figure(figsize=(12, 12))
+
+    # draw the heatmap with the mask and correct aspect ratio
+    sns.heatmap(corr_matrix, cmap='coolwarm', annot=True, fmt='.2f', square=True,
+                cbar_kws={"shrink": .8}, linewidths=.5)
+
+    # add title to the figure
+    plt.title('Correlation Matrix Heatmap of the Iris Dataset')
+
+    # save the plot as a PNG file
+    plt.savefig(output_dir / 'iris_correlation_matrix.png')
 
 if __name__ == "__main__":
     # main function to run the analysis
