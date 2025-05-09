@@ -73,13 +73,17 @@ def main():
     corrleation_matrix_heatmap(iris_data, variables, variables_titles, species, format_species, colors, labels, output_dir)
 
     # show the plots
-    plt.show()
+    # plt.show()
 
     # print a message to indicate that the analysis is complete
     print("Analysis complete: \n" 
-            "The histograms are saved to the iris_histograms.png\n"
-            "The scatter plots are saved to the iris_scatter.png\n"
-            "The descriptive statistics are saved to the iris_descriptive_stats.txt\n")
+            "The following has been produced into the 'outputs' directory:\n"
+            "\tThe Descriptive Statistics saved in the 'iris_descriptive_stats.txt',\n"
+            "\tHistogram for each Iris Feature (saved in indiviual files),\n"
+            "\tScatter plot for each Iris Feature (saved together in the 'iris_scatter.png'),\n"
+            "\tPairs plot for each Iris Feature in saved 'iris_pairplot.png',\n"
+            "\tCorrelation Matrix Heatmap saved in the 'iris_correlation_matrix.png',\n"
+            )
  
     
 def prepare_data(data):
@@ -281,9 +285,9 @@ def plot_scatter(data, variables, variables_titles, species, format_species, col
                             label=labels[k], color=colors[k], alpha=0.7)
             
             # Add title, labels, and legend
-            plt.title(f'{variable_1} vs {variable_2}')
-            plt.xlabel(f'{variable_1} (cm)')
-            plt.ylabel(f'{variable_2} (cm)')
+            plt.title(f'{variables_titles[i]} vs {variables_titles[j]}')
+            plt.xlabel(f'{variables_titles[i]} (cm)')
+            plt.ylabel(f'{variables_titles[j]} (cm)')
             plt.legend()
             plot_index += 1
 
@@ -366,6 +370,9 @@ def corrleation_matrix_heatmap(data, variables, variables_titles, species, forma
 
     # save the plot as a PNG file
     plt.savefig(output_dir / 'iris_correlation_matrix.png')
+
+
+
 
 if __name__ == "__main__":
     # main function to run the analysis
