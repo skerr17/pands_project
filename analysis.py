@@ -385,9 +385,13 @@ def corrleation_matrix_heatmap(data, variables, variables_titles, species, forma
 
 def pca_analysis(data, variables, variables_titles, species, format_species, colors, labels, output_dir):
     '''
-    # PCA Analysis of the Iris Dataset
+    # PCA Analysis of the Iris Dataset 
+    - Purpose of PCA is to reduce the dimensionality of the data while preserving as much variance as possible.
+    - PCA is a technique used to identify patterns in data and express the data in such a way as to highlight their similarities and differences.
+    - For the Iris dataset, PCA is used to reduce the 4D data (sepal length, sepal width, petal length, petal width) to 2D data (PC1 and PC2). 
     # Reference: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
     # Reference: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+    # Reference: https://www.geeksforgeeks.org/principal-component-analysis-pca/
 
     parameters:
         data (DataFrame): The input data to plot in heatmaps.
@@ -412,7 +416,13 @@ def pca_analysis(data, variables, variables_titles, species, format_species, col
 
     # plot the PCA results
     plt.figure(figsize=(12, 12)) # set the figure size
-    sns.scatterplot(data=pca_df, x='PC1', y='PC2', hue='species', palette=colors) # create a scatter plot of the PCA results
+    
+    # create a scatter plot of the PCA results
+    plt.scatter(data=pca_df, 
+                x='PC1', 
+                y='PC2', 
+                c=pca_df['species'].map(dict(zip(species, colors))) # map the species to the colors had to create a dict to map the species to the colors
+                ) 
     plt.title('PCA of the Iris Dataset') # add title to the figure
     plt.xlabel('Principal Component 1') # add x label to the figure
     plt.ylabel('Principal Component 2') # add y label to the figure
