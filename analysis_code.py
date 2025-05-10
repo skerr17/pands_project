@@ -202,7 +202,7 @@ def generate_descriptive_statistics(data, output_dir, variables_titles, species,
 
 def plot_histograms(data, variables, variables_titles, species, colors, labels, output_dir):
     '''
-    Creates the Histograms for each variable with the different species colour coded to individual .png files in hte output folder.
+    Creates the Histograms for each variable with the different species colour coded to individual .png files in the output folder.
     
     Parameters: 
         data (DataFrame): The input data to plot in histograms.
