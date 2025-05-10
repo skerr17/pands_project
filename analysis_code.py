@@ -53,7 +53,7 @@ def main():
         return
 
     # prepare the data for plotting
-    variables, variables_titles, species, format_species, colors, labels = prepare_data(iris_data)
+    variables, variables_titles, species, format_species, colours, labels = prepare_data(iris_data)
 
     # generate descriptive statistics
     global_iris_descriptive_stats, iris_descriptive_stats_by_species = generate_descriptive_statistics(iris_data, output_dir, variables_titles, species, format_species)
@@ -66,19 +66,19 @@ def main():
     print(tabulate(iris_descriptive_stats_by_species.stack(), headers='keys', tablefmt='grid'))
 
     # plot histograms
-    plot_histograms(iris_data, variables, variables_titles, species, colors, labels, output_dir)
+    plot_histograms(iris_data, variables, variables_titles, species, colours, labels, output_dir)
     
     # plot scatter plots
-    plot_scatter(iris_data, variables, variables_titles, species, colors, labels, output_dir)
+    plot_scatter(iris_data, variables, variables_titles, species, colours, labels, output_dir)
 
     # plot pairs plots
-    pairsplots(iris_data, format_species, colors, output_dir)
+    pairsplots(iris_data, format_species, colours, output_dir)
 
     # plot correlation matrix heatmap
     corrleation_matrix_heatmap(iris_data, variables_titles, output_dir)
 
     # perform PCA analysis
-    pca_analysis(iris_data, variables, species, colors, output_dir)
+    pca_analysis(iris_data, variables, species, colours, output_dir)
 
     # print a message to indicate that the analysis is complete
     print("Analysis complete: \n" 
@@ -104,7 +104,7 @@ def prepare_data(data):
         variables_titles (list): A list of titles for the histograms.
         species (list): A list of unique species in the data.
         format_species (list): A list of formatted species names for the legend.
-        colors (list): A list of colors for each species.
+        colours (list): A list of colours for each species.
         labels (list): A list of labels for each species.
     """
 
@@ -120,11 +120,11 @@ def prepare_data(data):
     # Format the species names for the legend
     format_species = [s.replace('Iris-', '').capitalize() for s in species] # ['Setosa', 'Versicolor', 'Virginica']
 
-    # Define colors for each species
-    colors = ['red', 'green', 'blue'] # Colors for each species
+    # Define colours for each species
+    colours = ['red', 'green', 'blue'] # Colours for each species
     labels = format_species # Labels for each species
 
-    return variables, variables_titles, species, format_species, colors, labels
+    return variables, variables_titles, species, format_species, colours, labels
 
 
 
@@ -200,7 +200,7 @@ def generate_descriptive_statistics(data, output_dir, variables_titles, species,
     return global_descriptive_stats, stats_by_species
 
 
-def plot_histograms(data, variables, variables_titles, species, colors, labels, output_dir):
+def plot_histograms(data, variables, variables_titles, species, colours, labels, output_dir):
     '''
     Creates the Histograms for each variable with the different species colour coded to individual .png files in the output folder.
     
@@ -209,7 +209,7 @@ def plot_histograms(data, variables, variables_titles, species, colors, labels, 
         variables (list): A list of the variables to plot.
         variables_titles (list): A list of titles for the histograms.
         species (list): A list of unique species in the data.
-        colors (list): A list of colors for each species.
+        colours (list): A list of colours for each species.
         labels (list): A list of labels for each species.
         output_dir (Path): The directory to save the output files.
     
@@ -231,7 +231,7 @@ def plot_histograms(data, variables, variables_titles, species, colors, labels, 
             species_data = data[data['species'] == specie][variable]
             # Plot the histogram for the current species
             plt.hist(species_data, bins=10, alpha=0.7, 
-                     color=colors[j], label=labels[j], edgecolor='black')
+                     color=colours[j], label=labels[j], edgecolor='black')
         
         # Add title, labels, and legend
         plt.title(f'Frequency of {variables_titles[i]} Across Species')
@@ -248,7 +248,7 @@ def plot_histograms(data, variables, variables_titles, species, colors, labels, 
         
 
 
-def plot_scatter(data, variables, variables_titles, species, colors, labels, output_dir):
+def plot_scatter(data, variables, variables_titles, species, colours, labels, output_dir):
     '''
     # Scatter Plot of each pair of variables
     # Reference: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
@@ -258,7 +258,7 @@ def plot_scatter(data, variables, variables_titles, species, colors, labels, out
         variables (list): A list of the variables to plot.
         variables_titles (list): A list of titles for the histograms.
         species (list): A list of unique species in the data.
-        colors (list): A list of colors for each species.
+        colours (list): A list of colours for each species.
         labels (list): A list of labels for each species.
         output_dir (Path): The directory to save the output files.
     
@@ -283,7 +283,7 @@ def plot_scatter(data, variables, variables_titles, species, colors, labels, out
                 species_data = data[data['species'] == specie]
                 # Plot the scatter plot for the current species
                 plt.scatter(species_data[variable_1], species_data[variable_2], 
-                            label=labels[k], color=colors[k], alpha=0.7)
+                            label=labels[k], color=colours[k], alpha=0.7)
             
             # Add title, labels, and legend
             plt.title(f'{variables_titles[i]} vs {variables_titles[j]}')
@@ -301,7 +301,7 @@ def plot_scatter(data, variables, variables_titles, species, colors, labels, out
 
 
     
-def pairsplots(data, format_species, colors, output_dir):
+def pairsplots(data, format_species, colours, output_dir):
     '''
     # Pairs Plot of each pair of variables
     # Reference: https://seaborn.pydata.org/generated/seaborn.pairplot.html
@@ -309,7 +309,7 @@ def pairsplots(data, format_species, colors, output_dir):
     parameters:
         data (DataFrame): The input data to plot in pairs plots.
         format_species (list): A list of formatted species names for the legend.
-        colors (list): A list of colors for each species.
+        colours (list): A list of colours for each species.
         output_dir (Path): The directory to save the output files.
     
     returns:
@@ -322,7 +322,7 @@ def pairsplots(data, format_species, colors, output_dir):
                                 data=data,
                                 hue='species', # set the hue to be the species
                                 kind='reg', # set the kind of plot to be a regression plot
-                                palette=colors, # set the colours of the species
+                                palette=colours, # set the colours of the species
                                 diag_kind='kde', # set the diagonal to be a kde plot
                                 height=2.5, # set the size of the figure
                                 )
@@ -392,7 +392,7 @@ def corrleation_matrix_heatmap(data, variables_titles, output_dir):
 
 
 
-def pca_analysis(data, variables, species, colors, output_dir):
+def pca_analysis(data, variables, species, colours, output_dir):
     '''
     # PCA Analysis of the Iris Dataset 
     - Purpose of PCA is to reduce the dimensionality of the data while preserving as much variance as possible.
@@ -406,7 +406,7 @@ def pca_analysis(data, variables, species, colors, output_dir):
         data (DataFrame): The input data to plot in heatmaps.
         variables (list): A list of the variables to plot.
         species (list): A list of unique species in the data.
-        colors (list): A list of colors for each species.
+        colours (list): A list of colours for each species.
         output_dir (Path): The directory to save the output files.
     
     returns:
@@ -436,7 +436,7 @@ def pca_analysis(data, variables, species, colors, output_dir):
     plt.scatter(data=pca_df, 
                 x='PC1', 
                 y='PC2', 
-                c=pca_df['species'].map(dict(zip(species, colors))) # map the species to the colors had to create a dict to map the species to the colors
+                c=pca_df['species'].map(dict(zip(species, colours))) # map the species to the colours had to create a dict to map the species to the colours
                 ) 
     plt.title('PCA of the Iris Dataset') # add title to the figure
     plt.xlabel('Principal Component 1') # add x label to the figure
