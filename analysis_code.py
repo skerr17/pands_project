@@ -294,8 +294,15 @@ def plot_scatter(data, variables, variables_titles, species, colours, labels, ou
             plt.legend()
             plot_index += 1
 
+
     # Adjust layout to prevent overlap
     plt.tight_layout()
+
+    # Create space at the top for the suptitle
+    plt.subplots_adjust(top=0.92) 
+
+    # Add a main title for the entire figure
+    plt.suptitle('Scatter Plots of the Iris Dataset', fontsize=24, y=0.98)
 
     # Save the plot as a PNG file
     plt.savefig(output_dir /f'iris_scatter.png')
