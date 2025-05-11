@@ -385,6 +385,7 @@ def corrleation_matrix_heatmap(data, variables_titles, output_dir):
                 vmin=-1,
                 vmax=1,
                 center=0,
+                annot_kws={"size": 20}
                 )
 
     # add title to the figure
