@@ -381,7 +381,11 @@ def corrleation_matrix_heatmap(data, variables_titles, output_dir):
                 cbar_kws={"shrink": .8}, 
                 linewidths=.5,
                 xticklabels=variables_titles,
-                yticklabels=variables_titles,)
+                yticklabels=variables_titles,
+                vmin=-1,
+                vmax=1,
+                center=0,
+                )
 
     # add title to the figure
     plt.title('Correlation Matrix Heatmap of the Iris Dataset')
