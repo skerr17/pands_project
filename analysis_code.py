@@ -435,14 +435,16 @@ def pca_analysis(data, variables, species, colours, output_dir):
     pca_df['species'] = data['species'] # add the species column to the PCA results
 
     # plot the PCA results
-    plt.figure(figsize=(12, 12)) # set the figure size
+    fig, ax = plt.subplots(figsize=(12, 12)) # set the figure size
     
     # create a scatter plot of the PCA results
-    plt.scatter(data=pca_df, 
-                x='PC1', 
-                y='PC2', 
-                c=pca_df['species'].map(dict(zip(species, colours))) # map the species to the colours had to create a dict to map the species to the colours
-                ) 
+    for specie, colour in zip(species, colours): 
+        subset = pca_df[pca_df['species'] == specie] # filter the data for the current species
+        ax.scatter(subset['PC1'], subset['PC2'], 
+                   label=specie, 
+                   color=colour, 
+                   )
+        
     plt.title('PCA of the Iris Dataset') # add title to the figure
     plt.xlabel('Principal Component 1') # add x label to the figure
     plt.ylabel('Principal Component 2') # add y label to the figure
