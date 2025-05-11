@@ -138,10 +138,12 @@ def generate_descriptive_statistics(data, output_dir, variables_titles, species,
     data (DataFrame): The input data to analyze.
     output_dir (Path): The directory to save the output file.
     variables_titles (list): A list of titles for the variables.
+    species (list): A list of unique species in the data.
     format_species (list): A list of formatted species names.
     
     Returns:
-        DataFrame: A DataFrame containing the descriptive statistics.
+        global_descriptive_stats: A DataFrame containing the global descriptive statistics.
+        stats_by_species: A DataFrame containing the descriptive statistics by species.
         Creates a text file with the descriptive statistics.
     """
     # format the data to be more readable
@@ -389,7 +391,11 @@ def corrleation_matrix_heatmap(data, variables_titles, output_dir):
                 )
 
     # add title to the figure
-    plt.title('Correlation Matrix Heatmap of the Iris Dataset')
+    plt.title('Correlation Matrix Heatmap of the Iris Dataset', fontsize=24)
+
+    # increase the size of the x and y labels
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
 
     # save the plot as a PNG file
     plt.savefig(output_dir / 'iris_correlation_matrix.png')
