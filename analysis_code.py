@@ -63,7 +63,7 @@ def main():
     print(tabulate(global_iris_descriptive_stats, headers='keys', tablefmt='grid'))
     print('\n\n')
     print('===Descriptive Statistics by Species===\n')
-    print(tabulate(iris_descriptive_stats_by_species.stack(), headers='keys', tablefmt='grid'))
+    print(tabulate(iris_descriptive_stats_by_species.stack(future_stack=True), headers='keys', tablefmt='grid'))
 
     # plot histograms
     plot_histograms(iris_data, variables, variables_titles, species, colours, labels, output_dir)
