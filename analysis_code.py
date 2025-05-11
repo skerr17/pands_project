@@ -428,10 +428,11 @@ def pca_analysis(data, variables, species, colours, output_dir):
     # perform PCA
     pca = PCA(n_components=2) # set the number of components to 2
     # fit the PCA model to the scaled data
-    pca_result = pca.fit_transform(scaled_data) 
+    pca_result = pca.fit_transform(scaled_data)
 
     # create Dataframe for PCA results
     pca_df = pd.DataFrame(data=pca_result, columns=['PC1', 'PC2']) # create a DataFrame for the PCA results
+
     pca_df['species'] = data['species'] # add the species column to the PCA results
 
     # plot the PCA results
