@@ -75,7 +75,7 @@ def main():
     pairsplots(iris_data, format_species, colours, output_dir)
 
     # plot correlation matrix heatmap
-    corrleation_matrix_heatmap(iris_data, variables_titles, output_dir)
+    correlation_matrix = correlation_matrix_heatmap(iris_data, variables_titles, output_dir)
 
     # perform PCA analysis
     pca_analysis(iris_data, variables, species, colours, output_dir)
@@ -370,7 +370,7 @@ def pairsplots(data, format_species, colours, output_dir):
 
 
 
-def corrleation_matrix_heatmap(data, variables_titles, output_dir):
+def correlation_matrix_heatmap(data, variables_titles, output_dir):
     '''
     # Correlation Matrix Heatmap of the Iris Dataset
     # Reference: https://seaborn.pydata.org/generated/seaborn.heatmap.html
@@ -383,17 +383,18 @@ def corrleation_matrix_heatmap(data, variables_titles, output_dir):
         output_dir (Path): The directory to save the output files.
     
     returns:
+        correlation_matrix (DataFrame): The correlation matrix of the data.
         None: The function saves heatmaps to a single .png file.
     '''
 
     # calculate the correlation matrix and drops the species column as it is not a numeric column
-    corr_matrix = data.drop(columns=['species']).corr()
+    correlation_matrix = data.drop(columns=['species']).corr()
 
     # set up the matplotlib figure
     plt.figure(figsize=(12, 12))
 
     # draw the heatmap with the mask and correct aspect ratio
-    sns.heatmap(corr_matrix, 
+    sns.heatmap(correlation_matrix, 
                 cmap='coolwarm', 
                 annot=True, 
                 fmt='.2f',
@@ -418,6 +419,8 @@ def corrleation_matrix_heatmap(data, variables_titles, output_dir):
     # save the plot as a PNG file
     plt.savefig(output_dir / 'iris_correlation_matrix.png')
     plt.close() # Close the plot to free up memory
+
+    return correlation_matrix 
 
 
 
