@@ -197,7 +197,7 @@ def generate_descriptive_statistics(data, output_dir, variables_titles, species,
         f.write('\n\n')
         # Write the descriptive statistics for each species to the file
         f.write('===Descriptive Statistics by Species===\n')
-        f.write(tabulate(stats_by_species.stack(), headers='keys', tablefmt='grid'))
+        f.write(tabulate(stats_by_species.stack(future_stack=True), headers='keys', tablefmt='grid'))
     
     return global_descriptive_stats, stats_by_species
 
