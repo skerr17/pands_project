@@ -435,6 +435,12 @@ def pca_analysis(data, variables, species, colours, output_dir):
 
     pca_df['species'] = data['species'] # add the species column to the PCA results
 
+    # calculate the explained variance percentage
+    pc1_variance = pca.explained_variance_ratio_[0] * 100 # get the explained variance percentage for PC1
+    pc2_variance = pca.explained_variance_ratio_[1] * 100 # get the explained variance percentage for PC2
+    total_variance = pca.explained_variance_ratio_.sum() * 100 # get the total explained variance percentage
+
+
     # plot the PCA results
     fig, ax = plt.subplots(figsize=(12, 12)) # set the figure size
     
@@ -446,9 +452,9 @@ def pca_analysis(data, variables, species, colours, output_dir):
                    color=colour, 
                    )
         
-    plt.title('PCA of the Iris Dataset') # add title to the figure
-    plt.xlabel('Principal Component 1') # add x label to the figure
-    plt.ylabel('Principal Component 2') # add y label to the figure
+    plt.title(f'PCA of the Iris Dataset (Total Explained Variance: {total_variance:.2f}%)') # add title to the figure
+    plt.xlabel(f'Principal Component 1 {pc1_variance:.2f}% variance') # add x label to the figure
+    plt.ylabel(f'Principal Component 2 {pc2_variance:.2f}% variance') # add y label to the figure
     plt.legend(title='Species') # add legend to the figure
     plt.savefig(output_dir / 'iris_pca.png') # save the plot as a PNG file
     plt.close() # Close the plot to free up memory
