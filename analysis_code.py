@@ -236,10 +236,12 @@ def plot_histograms(data, variables, variables_titles, species, colours, labels,
                      color=colours[j], label=labels[j], edgecolor='black')
         
         # Add title, labels, and legend
-        plt.title(f'Frequency of {variables_titles[i]} Across Species')
-        plt.xlabel(f'{variables_titles[i]} (cm)')
-        plt.ylabel('Frequency')
-        plt.legend()
+        plt.title(f'Frequency of {variables_titles[i]} Across Species', fontsize=24)
+        plt.xlabel(f'{variables_titles[i]} (cm)', fontsize=16)
+        plt.ylabel('Frequency', fontsize=16)
+        plt.legend(fontsize=16)
+        plt.xticks(fontsize=16)
+        plt.yticks(fontsize=16)
 
         # Save the plot as a PNG file
         filename = output_dir / f'{variable}_histogram.png'
