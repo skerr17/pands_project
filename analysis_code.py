@@ -330,24 +330,33 @@ def pairsplots(data, format_species, colours, output_dir):
                                 )
 
     # add the title to the figure
-    iris_pairplot.fig.suptitle('Pairplot of the Iris Dataset', y=1.02)
+    iris_pairplot.figure.suptitle('Pairplot of the Iris Dataset', fontsize=24)
+
+
+
+    # get the handles for the legend
+    handles, labels = iris_pairplot._legend.legend_handles, [
+        text.get_text() for text in iris_pairplot._legend.get_texts()
+    ]
 
     # Remove the default legend
     iris_pairplot._legend.remove()
 
-    # Create new legend with custom labels
-    handles = iris_pairplot._legend_data.values()
-    iris_pairplot.fig.legend(
+    # Create a new legend with custom labels
+    iris_pairplot.figure.legend(
         handles=handles,
         labels=format_species,
-        title="Species",
+        title=format_species,
         loc='upper center',
         bbox_to_anchor=(0.5, 1.05),
         ncol=len(format_species)
     )
 
+    iris_pairplot.figure.tight_layout()  # Adjust the layout to prevent overlap
+
     # save the plot as a PNG file
-    plt.savefig(output_dir / 'iris_pairplot.png')
+    iris_pairplot.figure.savefig(output_dir / 'iris_pairplot.png')
+
     plt.close() # Close the plot to free up memory
 
 
