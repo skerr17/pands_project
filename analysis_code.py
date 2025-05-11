@@ -402,7 +402,8 @@ def pca_analysis(data, variables, species, colours, output_dir):
     # PCA Analysis of the Iris Dataset 
     - Purpose of PCA is to reduce the dimensionality of the data while preserving as much variance as possible.
     - PCA is a technique used to identify patterns in data and express the data in such a way as to highlight their similarities and differences.
-    - For the Iris dataset, PCA is used to reduce the 4D data (sepal length, sepal width, petal length, petal width) to 2D data (PC1 and PC2). 
+    - For the Iris dataset, PCA is used to reduce the 4D data (sepal length, sepal width, petal length, petal width) to 2D data (PC1 and PC2).
+    - Note the PCA Variance Ratio is also calculated and displayed on the plot. 
     # Reference: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
     # Reference: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
     # Reference: https://www.geeksforgeeks.org/principal-component-analysis-pca/
@@ -435,7 +436,7 @@ def pca_analysis(data, variables, species, colours, output_dir):
 
     pca_df['species'] = data['species'] # add the species column to the PCA results
 
-    # calculate the explained variance percentage
+    # calculate the explained variance ratio percentage 
     pc1_variance = pca.explained_variance_ratio_[0] * 100 # get the explained variance percentage for PC1
     pc2_variance = pca.explained_variance_ratio_[1] * 100 # get the explained variance percentage for PC2
     total_variance = pca.explained_variance_ratio_.sum() * 100 # get the total explained variance percentage

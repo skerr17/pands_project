@@ -44,9 +44,9 @@ The Image below illustrates the Three Iris Flower Species and their anatomy (Ima
 5. Generated scatter plots to study the relationships between variable pairs.
 6. Created a pair plot to visualize relationships across all numeric features.
 7. Generated a Correlation Matrix Heatmap of the different features (Pearso Correlation Coefficient).
-8. Conducted Principal Component Analysis (PCA) to turn the 4 dimensional Iris Dataset to 2 dimensional.
+8. Conducted Principal Component Analysis (PCA) to turn the 4 dimensional Iris Dataset to 2 dimensional with a total explained variance of 95.80%.
 9. Documented the analysis and committed each logical change to GitHub.
-10. Documented the analysis of the Iris dataset in to a juypeter Notebook.
+10. Documented the analysis, insights and observations of the Iris dataset in to a Juypeter Notebook.
 
 
 ## Table of Contents 
