@@ -78,7 +78,7 @@ def main():
     correlation_matrix = correlation_matrix_heatmap(iris_data, variables_titles, output_dir)
 
     # perform PCA analysis
-    pca_analysis(iris_data, variables, species, colours, output_dir)
+    pca_df = pca_analysis(iris_data, variables, species, colours, output_dir)
 
     # print a message to indicate that the analysis is complete
     print("Analysis complete: \n" 
@@ -443,6 +443,7 @@ def pca_analysis(data, variables, species, colours, output_dir):
         output_dir (Path): The directory to save the output files.
     
     returns:
+        pca_df (DataFrame): The PCA results DataFrame containing PC1, PC2, and species.
         None: The function saves a PCA Scatter Plot to a single .png file.
     '''
 
@@ -480,12 +481,13 @@ def pca_analysis(data, variables, species, colours, output_dir):
                    color=colour, 
                    )
         
-    plt.title(f'PCA of the Iris Dataset (Total Explained Variance: {total_variance:.2f}%)') # add title to the figure
-    plt.xlabel(f'Principal Component 1 {pc1_variance:.2f}% variance') # add x label to the figure
-    plt.ylabel(f'Principal Component 2 {pc2_variance:.2f}% variance') # add y label to the figure
-    plt.legend(title='Species') # add legend to the figure
+    plt.title(f'PCA of the Iris Dataset (Total Explained Variance: {total_variance:.2f}%)', fontsize=24) # add title to the figure
+    plt.xlabel(f'Principal Component 1 {pc1_variance:.2f}% variance', fontsize=16) # add x label to the figure
+    plt.ylabel(f'Principal Component 2 {pc2_variance:.2f}% variance', fontsize=16) # add y label to the figure
+    plt.legend(title='Species', fontsize=16) # add legend to the figure
     plt.savefig(output_dir / 'iris_pca.png') # save the plot as a PNG file
     plt.close() # Close the plot to free up memory
+    return pca_df # return the PCA results
 
 
 if __name__ == "__main__":
